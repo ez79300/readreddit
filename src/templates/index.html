@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title or "Reddit Post Viewer" }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .reply { margin-left: 2rem; }
+        .score { font-size: 0.9em; color: #888; }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="mb-4">{{ title }}</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <p>{{ selftext }}</p>
+                <span class="score">▲ {{ comments[0].submission.score if comments else 0 }} upvotes</span>
+            </div>
+        </div>
+        <h3>Comments</h3>
+        {% macro render_comment(comment) %}
+            <li class="list-group-item">
+                <div>
+                    {{ comment.body }}
+                    <span class="score float-end">▲ {{ comment.score }} upvotes</span>
+                </div>
+                {% if comment.replies and comment.replies.list() %}
+                    <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ comment.id }}">View Replies</button>
+                    <ul class="list-group collapse reply" id="replies-{{ comment.id }}">
+                        {% for reply in comment.replies %}
+                            {{ render_comment(reply) }}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endmacro %}
+
+        {% if comments %}
+            <ul class="list-group">
+                {% for comment in comments %}
+                    {{ render_comment(comment) }}
+                {% endfor %}
+            </ul>
+            <!-- Pagination controls -->
+            <nav aria-label="Comment pagination" class="mt-4">
+                <ul class="pagination">
+                    {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('index', reddit_path=reddit_path, page=page-1) }}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Page {{ page }} of {{ total_pages }}</span>
+                    </li>
+                    {% if page < total_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('index', reddit_path=reddit_path, page=page+1) }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% else %}
+            <p>No comments found.</p>
+        {% endif %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
