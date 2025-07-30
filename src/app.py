@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 reddit = praw.Reddit(client_id='DxTS3LUmfnE81lZAyNwflQ',
                      client_secret='jpHUijFEu7Jl9DicgVn-mBPW8ZcC0w',
-                     user_agent='tester by /u/Redditname231')
+                     user_agent='To read reddit')
 
 @app.route('/', defaults={'reddit_path': ''})
 @app.route('/<path:reddit_path>')
