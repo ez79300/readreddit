@@ -16,6 +16,7 @@ def index(reddit_path):
         submission = reddit.submission(url=url)
         post_title = submission.title
         post_selftext = submission.selftext
+        post_url = submission.url
         submission.comments.replace_more(limit=0)
         # Only top-level comments for pagination
         top_level_comments = list(submission.comments)
@@ -33,6 +34,7 @@ def index(reddit_path):
             'index.html',
             title=post_title,
             selftext=post_selftext,
+            post_url=post_url,
             comments=paginated_comments,
             page=page,
             total_pages=total_pages,
