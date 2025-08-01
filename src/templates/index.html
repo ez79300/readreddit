@@ -15,6 +15,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <p>{{ selftext }}</p>
+                <a href="{{ post_url }}" target="_blank">{{ post_url}}</a>
                 <span class="score">▲ {{ comments[0].submission.score if comments else 0 }} upvotes</span>
             </div>
         </div>
