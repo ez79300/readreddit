@@ -17,6 +17,8 @@ def index(reddit_path):
         post_title = submission.title
         post_selftext = submission.selftext
         post_url = submission.url
+        image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
+        is_image = getattr(submission, 'post_hint', None) == 'image' or post_url.lower().endswith(image_extensions)
         submission.comments.replace_more(limit=0)
         # Only top-level comments for pagination
         top_level_comments = list(submission.comments)
@@ -35,6 +37,7 @@ def index(reddit_path):
             title=post_title,
             selftext=post_selftext,
             post_url=post_url,
+            is_image=is_image,
             comments=paginated_comments,
             page=page,
             total_pages=total_pages,
@@ -44,4 +47,4 @@ def index(reddit_path):
         return render_template('error.html', message="Please enter a valid Reddit URL path."), 400
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=False)
+    app.run(debug=True)

@@ -7,6 +7,15 @@
     <style>
         .reply { margin-left: 2rem; }
         .score { font-size: 0.9em; color: #888; }
+        .post-image {
+            display: block;
+            max-width: 100%;
+            max-height: 70vh;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -15,7 +24,13 @@
         <div class="card mb-4">
             <div class="card-body">
                 <p>{{ selftext }}</p>
-                <a href="{{ post_url }}" target="_blank">{{ post_url}}</a>
+                {% if is_image %}
+                    <a href="{{ post_url }}" target="_blank" class="d-block text-center">
+                        <img src="{{ post_url }}" alt="{{ title }}" class="post-image rounded mb-2">
+                    </a>
+                {% else %}
+                    <a href="{{ post_url }}" target="_blank">{{ post_url }}</a>
+                {% endif %}
                 <span class="score">▲ {{ comments[0].submission.score if comments else 0 }} upvotes</span>
             </div>
         </div>
