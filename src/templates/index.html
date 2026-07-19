@@ -24,10 +24,12 @@
         <div class="card mb-4">
             <div class="card-body">
                 <p>{{ selftext }}</p>
-                {% if is_image %}
-                    <a href="{{ post_url }}" target="_blank" class="d-block text-center">
-                        <img src="{{ post_url }}" alt="{{ title }}" class="post-image rounded mb-2">
-                    </a>
+                {% if post_images %}
+                    {% for img_url in post_images %}
+                        <a href="{{ img_url }}" target="_blank" class="d-block text-center">
+                            <img src="{{ img_url }}" alt="{{ title }}" class="post-image rounded mb-2">
+                        </a>
+                    {% endfor %}
                 {% else %}
                     <a href="{{ post_url }}" target="_blank">{{ post_url }}</a>
                 {% endif %}
@@ -38,9 +40,14 @@
         {% macro render_comment(comment) %}
             <li class="list-group-item">
                 <div>
-                    {{ comment.body }}
+                    {{ comment.display_body }}
                     <span class="score float-end">▲ {{ comment.score }} upvotes</span>
                 </div>
+                {% for img_url in comment.image_urls %}
+                    <a href="{{ img_url }}" target="_blank" class="d-block">
+                        <img src="{{ img_url }}" alt="comment image" class="post-image rounded mt-2 mb-2">
+                    </a>
+                {% endfor %}
                 {% if comment.replies and comment.replies.list() %}
                     <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ comment.id }}">View Replies</button>
                     <ul class="list-group collapse reply" id="replies-{{ comment.id }}">
