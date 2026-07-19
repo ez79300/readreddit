@@ -47,4 +47,4 @@ def index(reddit_path):
         return render_template('error.html', message="Please enter a valid Reddit URL path."), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=False)
